@@ -1,3 +1,8 @@
+let prefix = "!"
+let captchakey = ""
+let cookie = []
+let discordtoken = ""
+//==========================================================================
 const express = require("express"),
   app = express(),
   puppeteer = require("puppeteer-extra");
@@ -5,7 +10,7 @@ const discord = require("discord.js");
 const fs = require("fs");
 const RecaptchaPlugin = require("puppeteer-extra-plugin-recaptcha");
 const recaptchaPlugin = RecaptchaPlugin({
-  provider: { id: "2captcha", token: "recaptchatoken" },
+  provider: { id: "2captcha", token: captchakey},
   visualFeedback: true
 });
 puppeteer.use(recaptchaPlugin);
@@ -15,9 +20,9 @@ var listener = app.listen(process.env.PORT, function() {
   console.log("Your app is listening on port " + listener.address().port);
 });
 const client = new discord.Client();
-client.login("discordtoken");
+client.login(discordtoken);
 client.on("message", message => {
-  if (message.content.startsWith("!")) {
+  if (message.content.startsWith(prefix)) {
     const args = message.content
       .slice(1)
       .trim()
@@ -41,7 +46,7 @@ client.on("message", message => {
               args: argies
             };
             //add cookies here and you'll be able to log into any site!
-            let cookie = []
+         
             puppeteer.launch(options).then(async browser => {
               console.log("browser launched. stealth mode enabled");
               const page = await browser.newPage();
